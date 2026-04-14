@@ -26,7 +26,7 @@ def load_to_star(df):
 
         # insert into fact_table
         cur.execute("""
-            INSERT INTO fact_sensor (device_id, time_id, temperature, humidity, anomaly)
+            INSERT INTO fact_sensor (device_id, time_id, temperature, aqi, anomaly)
             VALUES (%s, %s, %s, %s, %s)
         """, (
             "api_sensor",

@@ -24,7 +24,7 @@ def init_db():
             id SERIAL PRIMARY KEY,
             device_id VARCHAR(50),
             temperature FLOAT,
-            humidity FLOAT,
+            aqi FLOAT,
             timestamp TIMESTAMP
         );
     """)
@@ -47,7 +47,7 @@ def init_db():
             device_id VARCHAR(50),
             time_id INT REFERENCES dim_time(time_id),
             temperature FLOAT,
-            humidity FLOAT,
+            aqi FLOAT,
             anomaly BOOLEAN
         );
     """)
@@ -59,13 +59,16 @@ def init_db():
 def save_raw(weather, air):
     conn = get_connection()
     cur = conn.cursor()
+    
+    air_value = air.get("current", {}).get("us_aqi", 0)
+    
     cur.execute("""
-        INSERT INTO raw_sensor_data (device_id, temperature, humidity, timestamp)
+        INSERT INTO raw_sensor_data (device_id, temperature, aqi, timestamp)
         VALUES (%s, %s, %s, NOW())
     """, (
         "api_sensor",
         weather["current_weather"]["temperature"],
-        0
+        air_value
     ))
     conn.commit()
     cur.close()
