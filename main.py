@@ -3,6 +3,7 @@ from fetch_data import fetch_weather, fetch_air_quality
 from processing import process_data
 from etl import load_to_star
 from db import save_raw, init_db
+from analytics import get_analytics
 
 init_db()
 
@@ -21,3 +22,7 @@ def run_pipeline():
     load_to_star(df)
 
     return {"status": "pipeline executed"}
+
+@app.get("/analytics")
+def analytics():
+    return get_analytics()
